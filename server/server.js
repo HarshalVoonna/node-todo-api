@@ -7,17 +7,28 @@ var {Users} = require('./models/users.js');
 
 var app = express();
 
-//middleware
+//Middleware
 app.use(bodyParser.json());
 
 app.post('/todos', (req, res) => {
-  //console.log(req.body);
+  console.log(req.body);
   var todo = new Todo({
     text: req.body.text
   });
 
   todo.save().then((doc)=>{
     res.status(200).send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+app.get('/todos', (req, res) => {
+  console.log(req);
+  Todo.find().then((todos)=> {
+    res.status(200).send({
+      todos: todos
+    });
   }, (e) => {
     res.status(400).send(e);
   });
